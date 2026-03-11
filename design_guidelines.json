@@ -1,0 +1,148 @@
+{
+  "project_name": "Marcoss Peluquería-Barbería",
+  "theme": "dark",
+  "design_philosophy": {
+    "core_concept": "Vintage Modern Gentleman",
+    "emotional_tone": "Professional, Masculine, Trustworthy, Classic, Intimate",
+    "visual_style": "Dark Luxury. High contrast between deep charcoal backgrounds and gold accents. Use of textures (leather, grain, steel) to avoid digital flatness."
+  },
+  "typography": {
+    "headings": {
+      "font_family": "Bebas Neue, sans-serif",
+      "usage": "Main section titles, Hero text, CTA buttons",
+      "weight": "400",
+      "letter_spacing": "tracking-wide"
+    },
+    "subheadings": {
+      "font_family": "Playfair Display, serif",
+      "usage": "Decorative accents, testimonials, 'About' intro",
+      "weight": "400/700",
+      "style": "italic for emphasis"
+    },
+    "body": {
+      "font_family": "Manrope, sans-serif",
+      "usage": "Paragraphs, UI elements, Price lists",
+      "weight": "300/400/500",
+      "notes": "Chosen over Inter for its slightly more geometric/modern character which fits the 'Barber' aesthetic."
+    }
+  },
+  "colors": {
+    "palette": {
+      "primary": {
+        "gold": "#C8A96A",
+        "gold_hover": "#D9B875",
+        "gold_dim": "#8F7645"
+      },
+      "secondary": {
+        "red": "#8B0000",
+        "red_bright": "#A80000"
+      },
+      "neutral": {
+        "bg_main": "#1F1F1F",
+        "bg_card": "#252525",
+        "bg_lighter": "#2A2A2A",
+        "text_main": "#F5F5F5",
+        "text_muted": "#A1A1A1",
+        "border": "#333333"
+      }
+    },
+    "semantic": {
+      "background": "bg-[#1F1F1F]",
+      "card_background": "bg-[#252525]",
+      "text_primary": "text-[#F5F5F5]",
+      "text_secondary": "text-[#A1A1A1]",
+      "text_accent": "text-[#C8A96A]",
+      "border_subtle": "border-[#333333]",
+      "border_accent": "border-[#C8A96A]/30",
+      "button_primary_bg": "bg-[#C8A96A]",
+      "button_primary_text": "text-[#1F1F1F]",
+      "button_primary_hover": "hover:bg-[#D9B875]"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "rounded-sm px-8 py-3 bg-[#C8A96A] text-[#1F1F1F] font-bebas tracking-wider uppercase hover:bg-[#D9B875] transition-all duration-300 font-bold text-lg shadow-[0_4px_14px_rgba(200,169,106,0.2)]",
+      "outline": "rounded-sm px-8 py-3 border border-[#C8A96A] text-[#C8A96A] font-bebas tracking-wider uppercase hover:bg-[#C8A96A] hover:text-[#1F1F1F] transition-all duration-300 font-bold text-lg",
+      "fixed_mobile": "fixed bottom-6 right-6 z-50 rounded-full w-14 h-14 bg-[#C8A96A] text-[#1F1F1F] flex items-center justify-center shadow-lg md:hidden animate-bounce-slow"
+    },
+    "cards": {
+      "service_item": "flex justify-between items-end border-b border-[#333333] pb-4 mb-4 hover:border-[#C8A96A] transition-colors group cursor-default",
+      "review_card": "bg-[#252525] p-8 border-l-4 border-[#C8A96A] relative",
+      "feature_card": "bg-[#252525] p-6 border border-[#333333] hover:border-[#C8A96A]/50 transition-all duration-300"
+    },
+    "inputs": {
+      "default": "bg-[#2A2A2A] border-[#333333] text-[#F5F5F5] focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A] placeholder:text-[#555] rounded-sm"
+    }
+  },
+  "layout_strategies": {
+    "hero": "Full height (min-h-screen). Background image with heavy dark overlay (bg-black/60). Centered content. Parallax effect on scroll.",
+    "services": "Two-column layout on desktop. 'Menu' style list. Use dotted leaders (flex-grow border-b border-dotted border-gray-700) between service name and price.",
+    "gallery": "Masonry grid or 'Bento' grid style. Mix of vertical and horizontal images. High contrast borders.",
+    "booking_modal": "Fixed centered modal. Dark theme. Steps: Service Selection -> Date -> Time -> Details. Use gold accent for selected states.",
+    "section_spacing": "py-20 md:py-32"
+  },
+  "assets": {
+    "images": {
+      "interior_main": "https://customer-assets.emergentagent.com/job_marcoss-chamberil/artifacts/i3pjg0d4_image.png",
+      "facade_main": "https://customer-assets.emergentagent.com/job_marcoss-chamberil/artifacts/8gmchtqc_image.png",
+      "barber_action_1": "https://images.unsplash.com/photo-1635301304768-5f2db6a5499b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjV8MHwxfHNlYXJjaHwxfHxiYXJiZXIlMjBjdXR0aW5nJTIwaGFpciUyMHZpbnRhZ2UlMjBwcm9mZXNzaW9uYWx8ZW58MHx8fHwxNzczMjYwMDc1fDA&ixlib=rb-4.1.0&q=85",
+      "barber_action_2": "https://images.unsplash.com/photo-1549663369-22ac6b052faf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjV8MHwxfHNlYXJjaHwyfHxiYXJiZXIlMjBjdXR0aW5nJTIwaGFpciUyMHZpbnRhZ2UlMjBwcm9mZXNzaW9uYWx8ZW58MHx8fHwxNzczMjYwMDc1fDA&ixlib=rb-4.1.0&q=85",
+      "tools_detail": "https://images.unsplash.com/photo-1625038032200-648fbcd800d0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MTJ8MHwxfHNlYXJjaHw0fHxiYXJiZXIlMjB0b29scyUyMHNjaXNzb3JzJTIwcmF6b3IlMjBsZWF0aGVyJTIwZGV0YWlsfGVufDB8fHx8MTc3MzI2MDA3NXww&ixlib=rb-4.1.0&q=85"
+    },
+    "icons": {
+      "library": "lucide-react",
+      "preferred": ["Scissors", "MapPin", "Phone", "Clock", "Star", "Calendar", "Menu", "X"]
+    }
+  },
+  "content_guidelines": {
+    "tone": "Use respectful, slightly formal but warm Spanish ('Usted' or polite 'Tú' depending on context, but prefer 'Te esperamos' - warm/close).",
+    "key_phrases": [
+      "Caballeros de Chamberí",
+      "Corte Clásico",
+      "Afeitado a Navaja",
+      "Reserva tu momento"
+    ]
+  },
+  "visual_enhancers": {
+    "texture": "Add a subtle noise overlay to the entire body background to simulate film grain/texture. opacity-5 pointer-events-none fixed inset-0 z-50.",
+    "borders": "Use 1px borders with 10-20% opacity for separation. Avoid heavy shadows.",
+    "gradients": "Use linear-gradient(to bottom, transparent, #1F1F1F) on Hero image bottom to blend into the next section."
+  },
+  "instructions_to_main_agent": {
+    "setup": [
+      "Install 'lucide-react' if missing.",
+      "Update tailwind.config.js to include the custom colors (#C8A96A, #1F1F1F, etc) and fonts.",
+      "Add imports for fonts in index.css (Bebas Neue, Playfair Display, Manrope)."
+    ],
+    "page_structure": [
+      "Create a LandingPage component that holds all sections.",
+      "Implement smooth scroll navigation (e.g., clicking 'Servicios' scrolls to #services).",
+      "Ensure the Booking Modal is accessible from the sticky header and the hero CTA."
+    ],
+    "specific_constraints": [
+      "Do NOT use social media icons (per user request).",
+      "The 'Call' button must be fixed and visible on mobile screens at all times.",
+      "Use the provided customer assets for the main visual anchors."
+    ]
+  },
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "You tend to converge toward generic, 'on distribution' outputs. In frontend design, this creates what users call the 'AI slop' aesthetic. Avoid this: make creative, distinctive frontends that surprise and delight.",
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy",
+    "Use glass-morphism effects with backdrop filters (12-24px blur)",
+    "You MUST NOT apply universal transition. Eg: transition: all. This results in breaking transforms. Always add transitions for specific interactive elements like button, input excluding transforms",
+    "You MUST NOT center align the app container, ie do not add .App { text-align: center; } in the css file. This disrupts the human natural reading flow of text",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations & color relevant to the app style",
+    "NEVER: use AI assistant Emoji characters like 🤖🧠 etc for icons.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations. Static = dead.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Subtle grain textures, noise overlays, custom cursors, selection states, and loading animations: separates good from extraordinary.",
+    "Main agent relies on these image URLs. Missing categories (especially sponsor logos) = main agent will use placeholder text which is FORBIDDEN",
+    "Prioritize using pre-existing components from src/components/ui when applicable",
+    "Components MUST use named exports",
+    "Pages MUST use default exports",
+    "Use sonner for toasts",
+    "All interactive and key informational elements MUST include a data-testid attribute to facilitate robust automated testing."
+  ]
+}
