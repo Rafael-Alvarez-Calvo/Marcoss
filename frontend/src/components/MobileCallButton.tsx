@@ -1,6 +1,6 @@
 import { Phone } from "lucide-react";
 
-export const MobileCallButton = () => {
+export const MobileCallButton: React.FC = () => {
   return (
     <a
       href="tel:914456544"

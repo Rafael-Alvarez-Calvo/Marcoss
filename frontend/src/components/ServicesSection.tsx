@@ -1,16 +1,27 @@
 import { useState, useEffect } from "react";
 import { Scissors, Clock } from "lucide-react";
-import { Button } from "./ui/button";
 import axios from "axios";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-export const ServicesSection = ({ onBookService }) => {
-  const [services, setServices] = useState([]);
+interface Service {
+  id: string;
+  name: string;
+  price: number;
+  duration: number;
+  description: string;
+}
+
+interface ServicesSectionProps {
+  onBookService: (service: Service) => void;
+}
+
+export const ServicesSection: React.FC<ServicesSectionProps> = ({ onBookService }) => {
+  const [services, setServices] = useState<Service[]>([]);
 
   useEffect(() => {
-    const fetchServices = async () => {
+    const fetchServices = async (): Promise<void> => {
       try {
         const response = await axios.get(`${API}/services`);
         setServices(response.data.services);
@@ -47,7 +58,7 @@ export const ServicesSection = ({ onBookService }) => {
         {/* Services List - Menu Style */}
         <div className="max-w-3xl mx-auto">
           <div className="space-y-6">
-            {services.map((service, index) => (
+            {services.map((service) => (
               <div 
                 key={service.id}
                 className="service-item group flex flex-col sm:flex-row sm:items-end justify-between pb-6 cursor-pointer"
@@ -71,7 +82,7 @@ export const ServicesSection = ({ onBookService }) => {
                 <div className="flex items-center gap-4 mt-4 sm:mt-0">
                   <div className="flex-grow sm:flex-grow-0 border-b border-dotted border-barber-border w-16 sm:w-24 hidden sm:block" />
                   <span className="font-bebas text-3xl text-barber-gold">{service.price.toFixed(2)}€</span>
-                  <Button 
+                  <button 
                     className="bg-transparent border border-barber-gold text-barber-gold hover:bg-barber-gold hover:text-barber-bg text-sm px-4 py-2 font-bebas tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -80,7 +91,7 @@ export const ServicesSection = ({ onBookService }) => {
                     data-testid={`book-service-${service.id}`}
                   >
                     Reservar
-                  </Button>
+                  </button>
                 </div>
               </div>
             ))}

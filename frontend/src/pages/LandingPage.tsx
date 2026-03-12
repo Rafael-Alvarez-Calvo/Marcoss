@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Header } from "../components/Header";
 import { HeroSection } from "../components/HeroSection";
 import { AboutSection } from "../components/AboutSection";
@@ -11,16 +11,24 @@ import { Footer } from "../components/Footer";
 import { BookingModal } from "../components/BookingModal";
 import { MobileCallButton } from "../components/MobileCallButton";
 
-export default function LandingPage() {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState(null);
+interface Service {
+  id: string;
+  name: string;
+  price: number;
+  duration: number;
+  description: string;
+}
 
-  const handleBookService = (service) => {
+export default function LandingPage(): React.JSX.Element {
+  const [isBookingOpen, setIsBookingOpen] = useState<boolean>(false);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+
+  const handleBookService = (service: Service): void => {
     setSelectedService(service);
     setIsBookingOpen(true);
   };
 
-  const handleOpenBooking = () => {
+  const handleOpenBooking = (): void => {
     setSelectedService(null);
     setIsBookingOpen(true);
   };

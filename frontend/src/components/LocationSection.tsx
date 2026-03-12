@@ -1,7 +1,6 @@
 import { MapPin, Navigation } from "lucide-react";
-import { Button } from "./ui/button";
 
-export const LocationSection = () => {
+export const LocationSection: React.FC = () => {
   const address = "Calle de Viriato, 32, Chamberí, 28010 Madrid, España";
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
   const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
@@ -28,7 +27,7 @@ export const LocationSection = () => {
               width="100%"
               height="100%"
               style={{ border: 0, filter: "grayscale(100%) contrast(1.1)" }}
-              allowFullScreen=""
+              allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Ubicación de Marcoss Peluquería-Barbería"

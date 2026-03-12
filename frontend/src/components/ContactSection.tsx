@@ -1,8 +1,17 @@
 import { Phone, Clock, MapPin, Calendar } from "lucide-react";
-import { Button } from "./ui/button";
 
-export const ContactSection = ({ onBookClick }) => {
-  const businessHours = [
+interface ContactSectionProps {
+  onBookClick: () => void;
+}
+
+interface BusinessHour {
+  day: string;
+  hours: string;
+  closed?: boolean;
+}
+
+export const ContactSection: React.FC<ContactSectionProps> = ({ onBookClick }) => {
+  const businessHours: BusinessHour[] = [
     { day: "Lunes", hours: "09:30 - 13:45 / 16:30 - 20:30" },
     { day: "Martes", hours: "09:30 - 13:45 / 16:30 - 20:30" },
     { day: "Miércoles", hours: "09:30 - 13:45 / 16:30 - 20:30" },
@@ -121,14 +130,14 @@ export const ContactSection = ({ onBookClick }) => {
               </li>
             </ul>
 
-            <Button 
+            <button 
               onClick={onBookClick}
               className="btn-primary rounded-sm w-full flex items-center justify-center gap-2 py-4"
               data-testid="contact-book-btn"
             >
               <Calendar className="w-5 h-5" />
               Reservar Cita Online
-            </Button>
+            </button>
           </div>
         </div>
       </div>

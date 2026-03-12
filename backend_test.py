@@ -178,7 +178,7 @@ class BarberShopAPITester:
             "Create Appointment",
             "POST",
             "appointments",
-            200,
+            201,
             data=appointment_data
         )
         

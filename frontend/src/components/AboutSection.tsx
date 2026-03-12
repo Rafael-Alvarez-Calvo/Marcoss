@@ -1,7 +1,13 @@
-import { Scissors, Users, Heart } from "lucide-react";
+import { Scissors, Users, Heart, LucideIcon } from "lucide-react";
 
-export const AboutSection = () => {
-  const features = [
+interface Feature {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}
+
+export const AboutSection: React.FC = () => {
+  const features: Feature[] = [
     {
       icon: Scissors,
       title: "Atención Personalizada",

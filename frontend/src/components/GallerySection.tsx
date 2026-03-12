@@ -1,7 +1,13 @@
 import { useState } from "react";
 
-export const GallerySection = () => {
-  const images = [
+interface GalleryImage {
+  src: string;
+  alt: string;
+  size: "large" | "medium" | "small";
+}
+
+export const GallerySection: React.FC = () => {
+  const images: GalleryImage[] = [
     {
       src: "https://customer-assets.emergentagent.com/job_marcoss-chamberil/artifacts/i3pjg0d4_image.png",
       alt: "Interior de la barbería con sillones clásicos",
@@ -34,7 +40,7 @@ export const GallerySection = () => {
     }
   ];
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
   return (
     <section id="galeria" className="py-24 lg:py-32 bg-barber-bg" data-testid="gallery-section">

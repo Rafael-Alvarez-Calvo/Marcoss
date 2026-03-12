@@ -1,9 +1,9 @@
-import "@/App.css";
+import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import { Toaster } from "@/components/ui/sonner";
 
-function App() {
+function App(): React.JSX.Element {
   return (
     <div className="App">
       <BrowserRouter>

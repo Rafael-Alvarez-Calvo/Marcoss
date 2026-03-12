@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Scissors, Phone } from "lucide-react";
-import { Button } from "./ui/button";
 
-export const Header = ({ onBookClick }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+interface HeaderProps {
+  onBookClick: () => void;
+}
+
+export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll = (): void => {
       setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
@@ -22,7 +25,7 @@ export const Header = ({ onBookClick }) => {
     { href: "#ubicacion", label: "Ubicación" },
   ];
 
-  const scrollToSection = (href) => {
+  const scrollToSection = (href: string): void => {
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
@@ -67,13 +70,13 @@ export const Header = ({ onBookClick }) => {
                 {link.label}
               </a>
             ))}
-            <Button 
+            <button 
               onClick={onBookClick}
               className="btn-primary rounded-sm"
               data-testid="header-book-btn"
             >
               Reservar Cita
-            </Button>
+            </button>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -104,13 +107,13 @@ export const Header = ({ onBookClick }) => {
                 {link.label}
               </a>
             ))}
-            <Button 
+            <button 
               onClick={() => { onBookClick(); setIsMobileMenuOpen(false); }}
               className="btn-primary rounded-sm w-full mt-4"
               data-testid="mobile-book-btn"
             >
               Reservar Cita
-            </Button>
+            </button>
             <a 
               href="tel:914456544" 
               className="flex items-center justify-center gap-2 btn-outline rounded-sm py-3"

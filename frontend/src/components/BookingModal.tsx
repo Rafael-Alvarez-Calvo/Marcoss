@@ -1,28 +1,43 @@
-import { useState, useEffect } from "react";
-import { X, Calendar as CalendarIcon, Clock, User, Phone, Mail, Scissors, Check, ChevronLeft, ChevronRight } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Calendar } from "./ui/calendar";
+import { useState, useEffect, FormEvent, ChangeEvent } from "react";
+import { Clock, User, Phone, Mail, Scissors, Check, ChevronLeft, X } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
-import { format, addDays, isBefore, startOfDay } from "date-fns";
+import { format, isBefore, startOfDay } from "date-fns";
 import { es } from "date-fns/locale";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-export const BookingModal = ({ isOpen, onClose, preselectedService }) => {
-  const [step, setStep] = useState(1);
-  const [services, setServices] = useState([]);
-  const [selectedService, setSelectedService] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [availableSlots, setAvailableSlots] = useState([]);
-  const [selectedTime, setSelectedTime] = useState(null);
-  const [isLoadingSlots, setIsLoadingSlots] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
+interface Service {
+  id: string;
+  name: string;
+  price: number;
+  duration: number;
+  description: string;
+}
+
+interface BookingModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  preselectedService: Service | null;
+}
+
+interface FormData {
+  name: string;
+  phone: string;
+  email: string;
+}
+
+export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, preselectedService }) => {
+  const [step, setStep] = useState<number>(1);
+  const [services, setServices] = useState<Service[]>([]);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [availableSlots, setAvailableSlots] = useState<string[]>([]);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [isLoadingSlots, setIsLoadingSlots] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     phone: "",
     email: ""
@@ -30,7 +45,7 @@ export const BookingModal = ({ isOpen, onClose, preselectedService }) => {
 
   // Fetch services
   useEffect(() => {
-    const fetchServices = async () => {
+    const fetchServices = async (): Promise<void> => {
       try {
         const response = await axios.get(`${API}/services`);
         setServices(response.data.services);
@@ -56,13 +71,12 @@ export const BookingModal = ({ isOpen, onClose, preselectedService }) => {
 
   // Fetch available slots when date changes
   useEffect(() => {
-    const fetchSlots = async () => {
+    const fetchSlots = async (): Promise<void> => {
       if (!selectedDate) return;
       
       setIsLoadingSlots(true);
       try {
-        const dateStr = format(selectedDate, "yyyy-MM-dd");
-        const response = await axios.get(`${API}/available-slots/${dateStr}`);
+        const response = await axios.get(`${API}/available-slots/${selectedDate}`);
         
         if (response.data.is_closed) {
           setAvailableSlots([]);
@@ -87,37 +101,42 @@ export const BookingModal = ({ isOpen, onClose, preselectedService }) => {
     if (!isOpen) {
       setStep(1);
       setSelectedService(null);
-      setSelectedDate(null);
+      setSelectedDate("");
       setSelectedTime(null);
       setAvailableSlots([]);
       setFormData({ name: "", phone: "", email: "" });
     }
   }, [isOpen]);
 
-  const handleServiceSelect = (service) => {
+  const handleServiceSelect = (service: Service): void => {
     setSelectedService(service);
     setStep(2);
   };
 
-  const handleDateSelect = (date) => {
-    setSelectedDate(date);
+  const handleDateChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setSelectedDate(e.target.value);
   };
 
-  const handleTimeSelect = (time) => {
+  const handleTimeSelect = (time: string): void => {
     setSelectedTime(time);
     setStep(3);
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     
     if (!formData.name || !formData.phone) {
       toast.error("Por favor, completa todos los campos obligatorios");
+      return;
+    }
+
+    if (!selectedService || !selectedDate || !selectedTime) {
+      toast.error("Por favor, completa la selección");
       return;
     }
 
@@ -130,42 +149,54 @@ export const BookingModal = ({ isOpen, onClose, preselectedService }) => {
         client_name: formData.name,
         client_phone: formData.phone,
         client_email: formData.email || null,
-        appointment_date: format(selectedDate, "yyyy-MM-dd"),
+        appointment_date: selectedDate,
         appointment_time: selectedTime
       };
 
       await axios.post(`${API}/appointments`, appointmentData);
       
+      const dateObj = new Date(selectedDate);
       toast.success("¡Cita reservada con éxito!", {
-        description: `${selectedService.name} - ${format(selectedDate, "d 'de' MMMM", { locale: es })} a las ${selectedTime}`
+        description: `${selectedService.name} - ${format(dateObj, "d 'de' MMMM", { locale: es })} a las ${selectedTime}`
       });
       
       onClose();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error creating appointment:", error);
-      toast.error(error.response?.data?.detail || "Error al reservar la cita");
+      const axiosError = error as { response?: { data?: { detail?: string } } };
+      toast.error(axiosError.response?.data?.detail || "Error al reservar la cita");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const today = startOfDay(new Date());
-  const maxDate = addDays(today, 30);
+  const today = format(new Date(), "yyyy-MM-dd");
 
-  const disabledDays = (date) => {
-    // Disable past dates and Sundays (day 0)
-    return isBefore(date, today) || date.getDay() === 0;
-  };
+  if (!isOpen) return null;
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px] bg-barber-bg border-barber-border text-barber-text max-h-[90vh] overflow-y-auto" data-testid="booking-modal">
-        <DialogHeader>
-          <DialogTitle className="font-bebas text-3xl tracking-wide text-barber-text flex items-center gap-3">
-            <Scissors className="w-7 h-7 text-barber-gold" />
-            RESERVAR CITA
-          </DialogTitle>
-        </DialogHeader>
+    <div className="fixed inset-0 z-50 flex items-center justify-center" data-testid="booking-modal">
+      {/* Overlay */}
+      <div 
+        className="absolute inset-0 bg-black/80"
+        onClick={onClose}
+      />
+      
+      {/* Modal Content */}
+      <div className="relative z-10 w-full max-w-[500px] mx-4 bg-barber-bg border border-barber-border rounded-lg p-6 max-h-[90vh] overflow-y-auto">
+        {/* Close Button */}
+        <button 
+          onClick={onClose}
+          className="absolute right-4 top-4 text-barber-muted hover:text-barber-text transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-6">
+          <Scissors className="w-7 h-7 text-barber-gold" />
+          <h2 className="font-bebas text-3xl tracking-wide text-barber-text">RESERVAR CITA</h2>
+        </div>
 
         {/* Progress Steps */}
         <div className="flex items-center justify-center gap-2 mb-6">
@@ -224,26 +255,24 @@ export const BookingModal = ({ isOpen, onClose, preselectedService }) => {
                 <p className="font-bebas text-lg text-barber-text">{selectedService?.name}</p>
               </div>
               <span className="font-bebas text-xl text-barber-gold">{selectedService?.price.toFixed(2)}€</span>
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
                 onClick={() => setStep(1)}
-                className="text-barber-muted hover:text-barber-gold"
+                className="text-barber-muted hover:text-barber-gold text-sm"
               >
                 Cambiar
-              </Button>
+              </button>
             </div>
 
-            {/* Calendar */}
-            <div className="flex justify-center">
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={handleDateSelect}
-                disabled={disabledDays}
-                locale={es}
-                className="rounded-sm border border-barber-border bg-barber-card"
-                data-testid="booking-calendar"
+            {/* Date Picker */}
+            <div>
+              <label className="block text-barber-muted text-sm mb-2">Selecciona una fecha</label>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={handleDateChange}
+                min={today}
+                className="w-full p-3 bg-barber-card border border-barber-border rounded-sm text-barber-text focus:border-barber-gold focus:outline-none"
+                data-testid="booking-date-input"
               />
             </div>
 
@@ -252,7 +281,7 @@ export const BookingModal = ({ isOpen, onClose, preselectedService }) => {
               <div className="space-y-3">
                 <p className="text-barber-muted text-sm flex items-center gap-2">
                   <Clock className="w-4 h-4" />
-                  Horarios disponibles para {format(selectedDate, "d 'de' MMMM", { locale: es })}
+                  Horarios disponibles
                 </p>
                 
                 {isLoadingSlots ? (
@@ -293,7 +322,7 @@ export const BookingModal = ({ isOpen, onClose, preselectedService }) => {
               </div>
               <div className="flex justify-between">
                 <span className="text-barber-muted">Fecha:</span>
-                <span className="text-barber-text">{selectedDate && format(selectedDate, "d 'de' MMMM", { locale: es })}</span>
+                <span className="text-barber-text">{selectedDate && format(new Date(selectedDate), "d 'de' MMMM", { locale: es })}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-barber-muted">Hora:</span>
@@ -308,53 +337,53 @@ export const BookingModal = ({ isOpen, onClose, preselectedService }) => {
             {/* Form Fields */}
             <div className="space-y-4">
               <div>
-                <Label htmlFor="name" className="text-barber-text flex items-center gap-2">
+                <label htmlFor="name" className="text-barber-text text-sm flex items-center gap-2 mb-1">
                   <User className="w-4 h-4 text-barber-gold" />
                   Nombre *
-                </Label>
-                <Input
+                </label>
+                <input
                   id="name"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
                   placeholder="Tu nombre"
-                  className="mt-1 bg-barber-card border-barber-border text-barber-text focus:border-barber-gold"
+                  className="w-full p-3 bg-barber-card border border-barber-border rounded-sm text-barber-text focus:border-barber-gold focus:outline-none"
                   required
                   data-testid="input-name"
                 />
               </div>
 
               <div>
-                <Label htmlFor="phone" className="text-barber-text flex items-center gap-2">
+                <label htmlFor="phone" className="text-barber-text text-sm flex items-center gap-2 mb-1">
                   <Phone className="w-4 h-4 text-barber-gold" />
                   Teléfono *
-                </Label>
-                <Input
+                </label>
+                <input
                   id="phone"
                   name="phone"
                   type="tel"
                   value={formData.phone}
                   onChange={handleInputChange}
                   placeholder="Tu teléfono"
-                  className="mt-1 bg-barber-card border-barber-border text-barber-text focus:border-barber-gold"
+                  className="w-full p-3 bg-barber-card border border-barber-border rounded-sm text-barber-text focus:border-barber-gold focus:outline-none"
                   required
                   data-testid="input-phone"
                 />
               </div>
 
               <div>
-                <Label htmlFor="email" className="text-barber-text flex items-center gap-2">
+                <label htmlFor="email" className="text-barber-text text-sm flex items-center gap-2 mb-1">
                   <Mail className="w-4 h-4 text-barber-gold" />
                   Email (opcional)
-                </Label>
-                <Input
+                </label>
+                <input
                   id="email"
                   name="email"
                   type="email"
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="Tu email"
-                  className="mt-1 bg-barber-card border-barber-border text-barber-text focus:border-barber-gold"
+                  className="w-full p-3 bg-barber-card border border-barber-border rounded-sm text-barber-text focus:border-barber-gold focus:outline-none"
                   data-testid="input-email"
                 />
               </div>
@@ -362,27 +391,26 @@ export const BookingModal = ({ isOpen, onClose, preselectedService }) => {
 
             {/* Actions */}
             <div className="flex gap-3 pt-4">
-              <Button
+              <button
                 type="button"
-                variant="outline"
                 onClick={() => setStep(2)}
-                className="flex-1 border-barber-border text-barber-text hover:bg-barber-card"
+                className="flex-1 py-3 border border-barber-border text-barber-text rounded-sm hover:bg-barber-card transition-colors flex items-center justify-center"
               >
                 <ChevronLeft className="w-4 h-4 mr-1" />
                 Atrás
-              </Button>
-              <Button
+              </button>
+              <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-1 btn-primary"
+                className="flex-1 py-3 btn-primary rounded-sm"
                 data-testid="confirm-booking-btn"
               >
                 {isSubmitting ? "Reservando..." : "Confirmar Cita"}
-              </Button>
+              </button>
             </div>
           </form>
         )}
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };

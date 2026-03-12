@@ -1,7 +1,10 @@
 import { Phone, MapPin, Star, Scissors } from "lucide-react";
-import { Button } from "./ui/button";
 
-export const HeroSection = ({ onBookClick }) => {
+interface HeroSectionProps {
+  onBookClick: () => void;
+}
+
+export const HeroSection: React.FC<HeroSectionProps> = ({ onBookClick }) => {
   const interiorImage = "https://customer-assets.emergentagent.com/job_marcoss-chamberil/artifacts/i3pjg0d4_image.png";
 
   return (
@@ -47,14 +50,14 @@ export const HeroSection = ({ onBookClick }) => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 animate-fade-in-up stagger-4">
-            <Button 
+            <button 
               onClick={onBookClick}
-              className="btn-primary rounded-sm text-lg px-10 py-4"
+              className="btn-primary rounded-sm text-lg px-10 py-4 flex items-center"
               data-testid="hero-book-btn"
             >
               <Scissors className="w-5 h-5 mr-2" />
               Reservar Cita
-            </Button>
+            </button>
             <a 
               href="tel:914456544" 
               className="btn-outline rounded-sm text-lg px-10 py-4 flex items-center"

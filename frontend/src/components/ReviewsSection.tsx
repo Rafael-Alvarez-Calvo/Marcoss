@@ -1,7 +1,14 @@
 import { Star, Quote } from "lucide-react";
 
-export const ReviewsSection = () => {
-  const reviews = [
+interface Review {
+  name: string;
+  rating: number;
+  text: string;
+  date: string;
+}
+
+export const ReviewsSection: React.FC = () => {
+  const reviews: Review[] = [
     {
       name: "Carlos M.",
       rating: 5,
@@ -28,7 +35,7 @@ export const ReviewsSection = () => {
     }
   ];
 
-  const renderStars = (rating) => {
+  const renderStars = (rating: number): React.JSX.Element[] => {
     return Array.from({ length: 5 }).map((_, index) => (
       <Star 
         key={index}

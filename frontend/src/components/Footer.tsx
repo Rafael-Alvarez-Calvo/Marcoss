@@ -1,9 +1,9 @@
 import { Scissors, Phone, MapPin, Clock } from "lucide-react";
 
-export const Footer = () => {
+export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
-  const scrollToSection = (href) => {
+  const scrollToSection = (href: string): void => {
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
